@@ -1,0 +1,123 @@
+{
+  "name": "yoinks-desktop",
+  "productName": "yoinks",
+  "version": "1.0.0",
+  "description": "Free video downloader for YouTube, TikTok, Instagram, X/Twitter, Facebook & 1800+ sites. Desktop app for Windows, macOS, Linux. MP4 4K/1080p or MP3.",
+  "author": {
+    "name": "Yasir Khan",
+    "email": "yasirwebio1@gmail.com"
+  },
+  "license": "MIT",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "fetch-bins": "node scripts/fetch-ytdlp.js",
+    "dist": "node scripts/fetch-ytdlp.js && electron-builder",
+    "dist:win": "node scripts/fetch-ytdlp.js && electron-builder --win",
+    "dist:mac": "node scripts/fetch-ytdlp.js && electron-builder --mac",
+    "dist:linux": "node scripts/fetch-ytdlp.js && electron-builder --linux"
+  },
+  "dependencies": {
+    "ffmpeg-static": "^5.2.0"
+  },
+  "devDependencies": {
+    "electron": "^38.0.0",
+    "electron-builder": "^26.0.0"
+  },
+  "build": {
+    "appId": "com.yoinks.desktop",
+    "productName": "yoinks",
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "renderer/**",
+      "build/icon.png",
+      "package.json"
+    ],
+    "asarUnpack": [
+      "node_modules/ffmpeg-static/**"
+    ],
+    "extraResources": [
+      {
+        "from": "bin",
+        "to": "bin",
+        "filter": [
+          "yt-dlp",
+          "yt-dlp.exe"
+        ]
+      }
+    ],
+    "win": {
+      "icon": "build/icon.png",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "perMachine": false,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "yoinks",
+      "artifactName": "yoinks-Setup-${version}.exe"
+    },
+    "portable": {
+      "artifactName": "yoinks-Portable-${version}.exe"
+    },
+    "mac": {
+      "icon": "build/icon.png",
+      "category": "public.app-category.utilities",
+      "target": [
+        "dmg",
+        "zip"
+      ],
+      "identity": null
+    },
+    "dmg": {
+      "artifactName": "yoinks-${version}-mac-${arch}.dmg"
+    },
+    "linux": {
+      "icon": "build/icon.png",
+      "category": "Utility",
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "maintainer": "Yasir Khan <yasirwebio1@gmail.com>",
+      "artifactName": "yoinks-${version}-linux-${arch}.${ext}"
+    }
+  },
+  "homepage": "https://github.com/itsyasirkhandev/yoinks-video-downloader",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/itsyasirkhandev/yoinks-video-downloader.git"
+  },
+  "keywords": [
+    "video-downloader",
+    "youtube-downloader",
+    "tiktok-downloader",
+    "instagram-downloader",
+    "twitter-video-downloader",
+    "youtube-to-mp3",
+    "yt-dlp",
+    "yt-dlp-gui",
+    "electron",
+    "desktop-app"
+  ]
+}

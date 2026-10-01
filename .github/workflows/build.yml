@@ -1,0 +1,65 @@
+# Builds yoinks for Windows, macOS and Linux on GitHub's free runners.
+# - Push a tag like v1.0.0 to build AND publish a GitHub Release with all installers.
+# - Or run it manually from the Actions tab (files appear under "Artifacts").
+name: Build yoinks
+
+on:
+  workflow_dispatch:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            args: --win
+            name: windows
+          - os: macos-latest
+            args: --mac --arm64
+            name: macos-apple-silicon
+          - os: ubuntu-latest
+            args: --linux
+            name: linux
+    runs-on: ${{ matrix.os }}
+    env:
+      CSC_IDENTITY_AUTO_DISCOVERY: "false"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install --no-audit --no-fund
+      - run: npm run fetch-bins
+      - run: npx electron-builder ${{ matrix.args }} --publish never
+      - uses: actions/upload-artifact@v4
+        with:
+          name: yoinks-${{ matrix.name }}
+          path: |
+            dist/*.exe
+            dist/*.dmg
+            dist/*.AppImage
+            dist/*.deb
+          if-no-files-found: ignore
+      - name: Publish to GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          name: yoinks ${{ github.ref_name }}
+          body: |
+            Free video downloader for YouTube, TikTok, Instagram, X/Twitter, Facebook & 1,800+ sites.
+
+            **Windows:** yoinks-Setup (installer) or yoinks-Portable (no install)
+            **macOS (Apple Silicon):** .dmg; if it says "damaged", run `xattr -cr /Applications/yoinks.app`
+            **Linux:** .AppImage or .deb
+          files: |
+            dist/*.exe
+            dist/*.dmg
+            dist/*.AppImage
+            dist/*.deb
+          fail_on_unmatched_files: false

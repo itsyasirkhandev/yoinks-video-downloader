@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https: data:; style-src 'self' 'unsafe-inline'; script-src 'self'" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>yoinks</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<main>
+  <button class="logo" id="home" aria-label="yoinks home">
+    <span class="logo-mark"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v12M6 11l6 6 6-6M5 20h14"/></svg></span>
+    <span class="logo-word">yoinks</span>
+  </button>
+  <p class="tagline">yoink any video. paste. yoink. done.</p>
+
+  <form class="paste" id="form" autocomplete="off">
+    <input class="input" id="url" type="url" aria-label="Video link" placeholder="Paste a link from YouTube, TikTok, Instagram, X…" required />
+    <button class="btn" id="go" type="submit">Yoink</button>
+  </form>
+
+  <button class="suggest" id="suggest" type="button" hidden>
+    <span class="suggest-k">Copied link</span><span class="suggest-u" id="suggestUrl"></span><span class="suggest-a">Use it →</span>
+  </button>
+
+  <div class="folder">
+    <span class="folder-k">Saving to</span>
+    <button class="link path" id="openFolder" type="button" title="Open folder"></button>
+    <button class="link" id="changeFolder" type="button">Change</button>
+  </div>
+
+  <div id="loading" class="card" hidden><div class="skeleton"><span class="spinner"></span><span id="loadingText">Looking up that video…</span></div></div>
+
+  <section id="picker" class="card" hidden aria-label="Choose a format">
+    <div class="media">
+      <img class="thumb" id="thumb" alt="" />
+      <div class="meta">
+        <div class="title" id="title"></div>
+        <div class="sub" id="sub"></div>
+      </div>
+    </div>
+    <div class="formats" id="formats" role="radiogroup" aria-label="Format"></div>
+    <div class="actions" id="actions">
+      <button class="btn ghost" id="back" type="button">Back</button>
+      <button class="btn" id="dl" type="button">Download</button>
+    </div>
+    <div class="progress" id="progress" hidden>
+      <div class="row"><span id="pstatus">Starting…</span><span id="ppct">0%</span></div>
+      <div class="bar" id="bar"><i id="fill"></i></div>
+      <div class="row"><span id="pspeed"></span><span id="peta"></span></div>
+      <div class="prow"><button class="btn ghost small" id="cancel" type="button">Cancel</button></div>
+    </div>
+  </section>
+
+  <div id="notice" class="notice" role="status" hidden>
+    <span id="noticeText"></span>
+    <span class="notice-actions" id="noticeActions" hidden>
+      <button class="btn small" id="openFile" type="button">Open</button>
+      <button class="btn ghost small" id="showFile" type="button">Show in folder</button>
+    </span>
+  </div>
+</main>
+<footer>
+  <span><kbd>↑</kbd> <kbd>↓</kbd> pick · <kbd>Enter</kbd> yoink · <kbd>Esc</kbd> back</span>
+  <button class="link" id="theme" type="button">theme: auto</button>
+</footer>
+<script src="app.js"></script>
+</body>
+</html>

@@ -41,6 +41,12 @@ function fmtDur(s) {
   return h ? h + ":" + String(m).padStart(2, "0") + ":" + sec : m + ":" + sec;
 }
 const tag = (h) => (h >= 2160 ? "4K" : h >= 1440 ? "2K" : h >= 720 ? "HD" : "SD");
+function fmtSize(n) {
+  if (!n) return "";
+  if (n >= 1e9) return (n / 1e9).toFixed(2) + " GB";
+  if (n >= 1e6) return (n / 1e6).toFixed(n >= 1e8 ? 0 : 1) + " MB";
+  return Math.max(1, Math.round(n / 1e3)) + " KB";
+}
 const isUrl = (s) => /^https?:\/\/\S+$/i.test(s);
 
 // ---------- clipboard detection ----------
@@ -95,12 +101,13 @@ function renderPicker() {
   $("title").textContent = i.title;
   $("sub").textContent = [i.site, i.uploader, fmtDur(i.duration)].filter(Boolean).join(" · ");
   if (i.thumbnail) { $("thumb").src = i.thumbnail; $("thumb").hidden = false; } else $("thumb").hidden = true;
+  const sz = i.sizes || {};
   const opts = [];
   if (i.hasVideo || i.resolutions.length) {
-    opts.push({ v: "best", name: "Best quality", k: i.resolutions[0] ? i.resolutions[0] + "p · mp4" : "mp4" });
-    for (const h of i.resolutions) opts.push({ v: String(h), name: h + "p", k: tag(h) + " · mp4" });
+    opts.push({ v: "best", name: "Best quality", k: i.resolutions[0] ? i.resolutions[0] + "p · mp4" : "mp4", size: sz.best });
+    for (const h of i.resolutions) opts.push({ v: String(h), name: h + "p", k: tag(h) + " · mp4", size: sz[h] });
   }
-  opts.push({ v: "mp3", name: "Audio only", k: "mp3" });
+  opts.push({ v: "mp3", name: "Audio only", k: "mp3", size: sz.mp3 });
   const box = $("formats");
   box.textContent = "";
   opts.forEach((o, idx) => {
@@ -110,7 +117,10 @@ function renderPicker() {
     const r = document.createElement("span"); r.className = "radio";
     const n = document.createElement("span"); n.textContent = o.name;
     const k = document.createElement("span"); k.className = "k"; k.textContent = (idx < 9 ? idx + 1 + " · " : "") + o.k;
-    l.append(r, n); b.append(l, k);
+    const s = document.createElement("span"); s.className = "size"; s.textContent = o.size ? "~" + fmtSize(o.size) : "size unknown";
+    if (!o.size) s.classList.add("unknown");
+    const right = document.createElement("span"); right.className = "right"; right.append(k, s);
+    l.append(r, n); b.append(l, right);
     b.onclick = () => select(o.v);
     b.ondblclick = () => { select(o.v); download(); };
     box.appendChild(b);
@@ -173,7 +183,9 @@ function setProgress(j) {
   $("ppct").textContent = processing ? "" : Math.round(j.progress || 0) + "%";
   $("bar").classList.toggle("indeterminate", processing);
   $("fill").style.width = processing ? "" : (j.progress || 0) + "%";
-  $("pspeed").textContent = j.speed && !processing && j.speed !== "NA" ? j.speed : "";
+  const got = j.downloaded ? fmtSize(j.downloaded) + (j.total ? " of ~" + fmtSize(j.total) : "") : "";
+  const speed = j.speed && j.speed !== "NA" ? j.speed : "";
+  $("pspeed").textContent = processing ? "" : [got, speed].filter(Boolean).join(" · ");
   $("peta").textContent = j.eta && !processing && j.eta !== "NA" ? "ETA " + j.eta : "";
 }
 

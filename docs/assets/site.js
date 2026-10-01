@@ -1,44 +1,89 @@
-// Point download buttons at the real files from the latest GitHub release,
-// and pick the right one for the visitor's OS.
 (function () {
   var REPO = "itsyasirkhandev/yoinks-video-downloader";
   var API = "https:" + "//api.github.com/repos/" + REPO;
+  var root = document.documentElement;
+  var $ = function (id) { return document.getElementById(id); };
 
-  var ua = navigator.userAgent;
-  var os = /Windows/i.test(ua) ? "win" : /Mac/i.test(ua) && !/iPhone|iPad/i.test(ua) ? "mac" : /Linux|X11/i.test(ua) && !/Android/i.test(ua) ? "linux" : null;
-  var labels = { win: "Download for Windows", mac: "Download for macOS", linux: "Download for Linux" };
-  var primaryKey = { win: "setup", mac: "dmg", linux: "appimage" };
-  if (os) document.getElementById("dlLabel").textContent = labels[os];
+  // ---------- theme toggle ----------
+  var mq = window.matchMedia("(prefers-color-scheme: dark)");
+  var btn = $("themeToggle");
+  function current() { return root.getAttribute("data-theme") || (mq.matches ? "dark" : "light"); }
+  function syncLabel() { btn.setAttribute("aria-label", current() === "dark" ? "Switch to light theme" : "Switch to dark theme"); }
+  btn.addEventListener("click", function () {
+    var next = current() === "dark" ? "light" : "dark";
+    root.setAttribute("data-theme", next);
+    try { localStorage.setItem("yoinks-theme", next); } catch (e) {}
+    syncLabel();
+  });
+  if (mq.addEventListener) mq.addEventListener("change", syncLabel);
+  syncLabel();
 
-  function match(name) {
-    var n = name.toLowerCase();
-    if (n.endsWith(".exe") && n.indexOf("setup") > -1) return "setup";
-    if (n.endsWith(".exe") && n.indexOf("portable") > -1) return "portable";
-    if (n.endsWith(".dmg")) return "dmg";
-    if (n.endsWith(".appimage")) return "appimage";
-    if (n.endsWith(".deb")) return "deb";
-    return null;
+  // ---------- scroll reveal, once ----------
+  var items = document.querySelectorAll(".reveal, .reveal-group");
+  if ("IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+      });
+    }, { rootMargin: "0px 0px -10% 0px", threshold: 0.15 });
+    items.forEach(function (el) { io.observe(el); });
+  } else {
+    items.forEach(function (el) { el.classList.add("in"); });
   }
-  function mb(b) { return Math.round(b / 1e6) + " MB"; }
 
-  fetch(API + "/releases/latest").then(function (r) { return r.ok ? r.json() : null; }).then(function (rel) {
-    if (!rel || !rel.assets) return;
+  // ---------- OS detection ----------
+  var ua = navigator.userAgent || "";
+  var plat = (navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || "";
+  var mobile = /Android|iPhone|iPad|iPod/i.test(ua) || (navigator.userAgentData && navigator.userAgentData.mobile);
+  var os = mobile ? "mobile" : /Win/i.test(plat + ua) ? "windows" : /Mac/i.test(plat + ua) ? "mac" : /Linux|X11/i.test(plat + ua) ? "linux" : "other";
+  var primary = { windows: "setup", mac: "dmg", linux: "appimage" }[os];
+  var names = { windows: "Download for Windows", mac: "Download for Mac", linux: "Download for Linux" };
+
+  if (os === "mobile") {
+    $("dlLabel").textContent = "See downloads for your computer";
+    $("dlPrimary").href = "#download";
+    $("dlMeta").textContent = "yoinks runs on Windows, macOS and Linux desktops";
+  } else if (primary) {
+    $("dlLabel").textContent = names[os];
+  }
+
+  function mb(n) { return "~" + Math.round(n / 1e6) + " MB"; }
+  var match = {
+    setup: /Setup.*\.exe$/i,
+    portable: /Portable.*\.exe$/i,
+    dmg: /\.dmg$/i,
+    appimage: /\.AppImage$/i,
+    deb: /\.deb$/i
+  };
+
+  fetch(API + "/releases/latest").then(function (r) {
+    if (!r.ok) throw new Error("release");
+    return r.json();
+  }).then(function (rel) {
+    var ver = String(rel.tag_name || "").replace(/^v/, "");
+    if (ver) $("ver").textContent = ver;
     var found = {};
-    rel.assets.forEach(function (a) { var k = match(a.name); if (k) found[k] = a; });
-    document.querySelectorAll("[data-asset]").forEach(function (el) {
-      var a = found[el.getAttribute("data-asset")];
-      if (a) { el.href = a.browser_download_url; el.title = a.name + " (" + mb(a.size) + ")"; }
+    (rel.assets || []).forEach(function (a) {
+      Object.keys(match).forEach(function (k) { if (!found[k] && match[k].test(a.name)) found[k] = a; });
     });
-    document.getElementById("ver").textContent = "Latest version: " + rel.tag_name;
-    if (os && found[primaryKey[os]]) {
-      var p = found[primaryKey[os]];
-      document.getElementById("dlPrimary").href = p.browser_download_url;
-      document.getElementById("dlMeta").textContent = rel.tag_name + " · " + mb(p.size) + " · also on " +
-        ["Windows", "macOS", "Linux"].filter(function (x) { return x.toLowerCase().indexOf(os === "win" ? "windows" : os === "mac" ? "macos" : "linux") !== 0; }).join(" & ");
+    Object.keys(found).forEach(function (k) {
+      document.querySelectorAll('[data-asset="' + k + '"]').forEach(function (el) { el.href = found[k].browser_download_url; });
+      document.querySelectorAll('[data-size="' + k + '"]').forEach(function (el) { el.textContent = mb(found[k].size); });
+    });
+    if (primary && found[primary]) {
+      $("dlPrimary").href = found[primary].browser_download_url;
+      var extra = os === "mac" ? " \u00b7 Apple Silicon" : "";
+      $("dlMeta").textContent = "v" + ver + " \u00b7 " + mb(found[primary].size) + extra + " \u00b7 Free";
     }
-  }).catch(function () {});
+  }).catch(function () {
+    if (os !== "mobile") $("dlMeta").textContent = "Opens the GitHub releases page";
+  });
 
   fetch(API).then(function (r) { return r.ok ? r.json() : null; }).then(function (repo) {
-    if (repo && repo.stargazers_count) document.getElementById("stars").textContent = "★ " + repo.stargazers_count;
+    if (repo && repo.stargazers_count >= 10) {
+      var s = $("stars");
+      s.textContent = " \u00b7 " + repo.stargazers_count.toLocaleString() + " stars";
+      s.hidden = false;
+    }
   }).catch(function () {});
 })();

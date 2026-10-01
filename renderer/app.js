@@ -104,7 +104,7 @@ function renderPicker() {
   const sz = i.sizes || {};
   const opts = [];
   if (i.hasVideo || i.resolutions.length) {
-    opts.push({ v: "best", name: "Best quality", k: i.resolutions[0] ? i.resolutions[0] + "p · mp4" : "mp4", size: sz.best });
+    opts.push({ v: "best", name: "Best quality", k: (i.bestHeight || i.resolutions[0]) ? (i.bestHeight || i.resolutions[0]) + "p · mp4" : "mp4", size: sz.best });
     for (const h of i.resolutions) opts.push({ v: String(h), name: h + "p", k: tag(h) + " · mp4", size: sz[h] });
   }
   opts.push({ v: "mp3", name: "Audio only", k: "mp3", size: sz.mp3 });

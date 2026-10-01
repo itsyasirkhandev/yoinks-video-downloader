@@ -161,6 +161,7 @@ async function getInfo(url) {
     thumbnail: info.thumbnail || null,
     site: info.extractor_key || info.extractor || "",
     resolutions,
+    bestHeight: heights[0] || null,
     sizes,
     hasVideo: heights.length > 0 || (info.vcodec && info.vcodec !== "none") || /^(mp4|webm|mov|mkv)$/i.test(info.ext || ""),
   };

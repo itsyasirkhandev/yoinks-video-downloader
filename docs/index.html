@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>yoinks: free video downloader for YouTube, TikTok, Instagram and X</title>
-<meta name="description" content="yoinks is a free, open source desktop app for Windows, macOS and Linux. Paste a link from YouTube, TikTok, Instagram, X or Facebook and see every quality with its file size before you download.">
+<meta name="description" content="yoinks is a free, open source desktop video downloader for Windows, macOS and Linux. Paste a link from YouTube, TikTok, Instagram, X or Facebook, see the file size of every quality, and save it as MP4 or MP3.">
 <link rel="canonical" href="https://itsyasirkhandev.github.io/yoinks-video-downloader/">
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#141413" media="(prefers-color-scheme: dark)">
@@ -20,7 +20,7 @@
 <meta name="twitter:description" content="Free desktop video downloader for Windows, macOS and Linux.">
 <meta name="twitter:image" content="https://itsyasirkhandev.github.io/yoinks-video-downloader/assets/og.png">
 <link rel="icon" type="image/png" href="assets/icon.png">
-<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/style.css?v=3">
 <script>
 (function () {
   var d = document.documentElement;
@@ -43,13 +43,14 @@
     </a>
     <nav aria-label="Main">
       <ul>
+        <li class="hide-sm"><a href="#how">How it works</a></li>
         <li class="hide-sm"><a href="#sizes">File sizes</a></li>
-        <li class="hide-sm"><a href="#features">Features</a></li>
+        <li class="hide-sm"><a href="#compare">Compare</a></li>
         <li class="hide-sm"><a href="#faq">FAQ</a></li>
-        <li><a href="#download">Download</a></li>
         <li><a href="https://github.com/itsyasirkhandev/yoinks-video-downloader">GitHub</a></li>
       </ul>
     </nav>
+    <a class="btn btn-sm" href="#download">Download</a>
     <button class="theme" id="themeToggle" type="button" aria-label="Switch to dark theme">
       <svg class="i-moon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
       <svg class="i-sun" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
@@ -59,122 +60,239 @@
 
 <main id="main" tabindex="-1">
 
+  <!-- 1. Hero -->
   <section class="hero wrap" aria-labelledby="hero-title">
     <div class="hero-copy">
-      <p class="eyebrow rise" style="--i:0">Free desktop app for Windows, macOS and Linux</p>
-      <h1 id="hero-title" class="rise" style="--i:1">Save videos from almost any site, and know the file size first.</h1>
-      <p class="lead rise" style="--i:2">Paste a link from YouTube, TikTok, Instagram, X or Facebook. yoinks lists every quality it can find with the file size next to it, so you can grab 1080p for the TV or a small MP3 for your phone.</p>
+      <p class="eyebrow rise" style="--i:0">Free video downloader for Windows, macOS and Linux</p>
+      <h1 id="hero-title" class="rise" style="--i:1">Download videos from YouTube, TikTok and Instagram, with the file size on every option.</h1>
+      <p class="lead rise" style="--i:2">Paste a link and yoinks lists each quality the video comes in, from 4K down to audio only, with how big the file will be. You choose, it saves an MP4 or MP3 to your Downloads folder.</p>
       <div class="cta rise" style="--i:3">
-        <a class="btn" id="dlPrimary" href="https://github.com/itsyasirkhandev/yoinks-video-downloader/releases/latest"><span id="dlLabel">Download yoinks</span></a>
-        <p class="cta-meta" id="dlMeta">Free and open source</p>
+        <a class="btn btn-lg" data-primary href="https://github.com/itsyasirkhandev/yoinks-video-downloader/releases/latest"><span data-primary-label>Download yoinks</span></a>
+        <p class="cta-meta" data-primary-meta>Free and open source</p>
       </div>
-      <p class="alt rise" style="--i:4"><a href="#download">Other systems</a><span aria-hidden="true"> &middot; </span><a href="https://github.com/itsyasirkhandev/yoinks-video-downloader">Source code on GitHub</a><span id="stars" hidden></span></p>
+      <ul class="facts rise" style="--i:4" aria-label="What you get">
+        <li>No ads or pop-ups</li>
+        <li>No account</li>
+        <li>No watermark added</li>
+        <li>MIT licensed</li>
+      </ul>
     </div>
     <figure class="shot rise" style="--i:2">
-      <img class="shot-light" src="assets/app-light.png" width="1200" height="1250" alt="The yoinks window after pasting a link to Big Buck Bunny 4K. It lists Best quality at about 2.96 GB, 1080p at about 300 MB, 480p at about 96.6 MB, 360p at about 130 MB, 240p at about 30.4 MB and Audio only at about 19.4 MB." decoding="async" fetchpriority="high">
-      <img class="shot-dark" src="assets/app-dark.png" width="1200" height="1250" alt="The yoinks window in dark theme after pasting a link to Big Buck Bunny 4K, listing each quality with its file size." decoding="async" loading="lazy">
-      <figcaption>The real app window, after pasting a Wikimedia Commons link.</figcaption>
+      <div class="shot-frame">
+        <img class="shot-light" src="assets/app-light.png" width="1200" height="1530" alt="The yoinks window after pasting a link to Big Buck Bunny 4K. It lists Best quality 2250p at about 2.96 GB, 1080p at about 300 MB, 480p at about 96.6 MB, 360p at about 130 MB, 240p at about 30.4 MB and Audio only at about 19.4 MB, with Back and Download buttons." decoding="async" fetchpriority="high">
+        <img class="shot-dark" src="assets/app-dark.png" width="1200" height="1530" alt="The yoinks window in dark theme after pasting a link to Big Buck Bunny 4K, listing each quality with its file size." decoding="async" loading="lazy">
+      </div>
+      <figcaption>The real app, after pasting a link from Wikimedia Commons.</figcaption>
     </figure>
   </section>
 
+  <!-- 2. How it works -->
+  <section class="how" id="how" aria-labelledby="how-title">
+    <div class="wrap">
+      <h2 id="how-title" class="reveal">From link to file in about a minute</h2>
+      <ol class="steps reveal">
+        <li>
+          <span class="num" aria-hidden="true">1</span>
+          <h3>Copy the link</h3>
+          <p>Use the Share or Copy link button in the YouTube, TikTok or Instagram app, or copy the address from your browser.</p>
+        </li>
+        <li>
+          <span class="num" aria-hidden="true">2</span>
+          <h3>Paste it into yoinks</h3>
+          <p>Paste with <kbd>Ctrl</kbd>+<kbd>V</kbd> (<kbd>Cmd</kbd>+<kbd>V</kbd> on a Mac) and press <kbd>Enter</kbd>. If yoinks spots a link on your clipboard, it offers to use it, so you only click once.</p>
+        </li>
+        <li>
+          <span class="num" aria-hidden="true">3</span>
+          <h3>Pick a quality</h3>
+          <p>Each row shows the resolution and the file size. Use the arrow keys or click, then press Download.</p>
+        </li>
+        <li>
+          <span class="num" aria-hidden="true">4</span>
+          <h3>Open it</h3>
+          <p>Watch the progress, speed and time left. When it finishes, click Open to play it or Show in folder to find it.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- 3. File sizes (flagship) -->
   <section class="sizes" id="sizes" aria-labelledby="sizes-title">
     <div class="wrap sizes-in">
       <div class="sizes-copy reveal">
-        <h2 id="sizes-title">Every option comes with its file size</h2>
-        <p>These are the numbers yoinks showed for <em>Big Buck Bunny 4K</em>, a 10 minute 35 second film on Wikimedia Commons. The video site reports them, so treat each one as a close estimate.</p>
-        <p class="note">Look at 360p. It is bigger than 480p because that file uses an older codec, which needs more data for a smaller picture. You would never guess that from the resolution, which is the whole reason the size sits on every row.</p>
+        <p class="kicker">Why the size matters</p>
+        <h2 id="sizes-title">Know how big it is before it fills your drive</h2>
+        <p>These are the sizes yoinks showed for <em>Big Buck Bunny 4K</em>, a 10 minute 35 second film. The best version is 2.96 GB. The 1080p one looks almost the same on a laptop and is a tenth of that.</p>
+        <p class="note">Notice 360p is bigger than 480p. That file uses an older codec, which needs more data for a smaller picture. You can't tell from the resolution alone, so yoinks puts the size on every row.</p>
       </div>
-      <figure class="bars reveal-group" aria-labelledby="bars-cap">
+      <figure class="bars reveal" aria-labelledby="bars-cap">
         <ol class="bar-list">
-          <li style="--w:.998;--i:0"><span class="q">Best quality</span><span class="track"><i></i></span><span class="size">~2.96 GB</span></li>
+          <li style="--w:.998;--i:0"><span class="q">Best quality (2250p)</span><span class="track"><i></i></span><span class="size">~2.96 GB</span></li>
           <li style="--w:.597;--i:1"><span class="q">1080p</span><span class="track"><i></i></span><span class="size">~300 MB</span></li>
           <li style="--w:.398;--i:2"><span class="q">480p</span><span class="track"><i></i></span><span class="size">~96.6 MB</span></li>
           <li class="odd" style="--w:.45;--i:3"><span class="q">360p</span><span class="track"><i></i></span><span class="size">~130 MB</span></li>
           <li style="--w:.195;--i:4"><span class="q">240p</span><span class="track"><i></i></span><span class="size">~30.4 MB</span></li>
           <li style="--w:.116;--i:5"><span class="q">Audio only (MP3)</span><span class="track"><i></i></span><span class="size">~19.4 MB</span></li>
         </ol>
-        <figcaption id="bars-cap">Bar lengths use a log scale so the small files stay visible.</figcaption>
+        <figcaption id="bars-cap">Sizes are estimates reported by the video site. Bars use a log scale so the small files stay visible.</figcaption>
       </figure>
     </div>
   </section>
 
-  <section class="features wrap" id="features" aria-labelledby="features-title">
-    <h2 id="features-title" class="reveal">What else it handles</h2>
-    <ul class="feature-list reveal">
-      <li><h3>Progress you can watch</h3><p>Percent, speed and time left update while the file downloads, on Windows as well.</p></li>
-      <li><h3>Picks up copied links</h3><p>Copy a link in your browser, switch to yoinks, and it offers to use that link.</p></li>
-      <li><h3>Audio as MP3</h3><p>Choose Audio only to keep just the sound. ffmpeg converts it on your computer.</p></li>
-      <li><h3>Stays on your computer</h3><p>There is no account, no ads and no tracking. Files go to your Downloads folder, or any folder you pick.</p></li>
-      <li><h3>Keeps up with site changes</h3><p>yoinks updates yt-dlp, the engine inside it, so downloads keep working after YouTube or TikTok change something.</p></li>
-      <li><h3>Light and dark</h3><p>The app follows your system theme, and you can switch it yourself at the bottom of the window.</p></li>
+  <!-- 4. Use cases -->
+  <section class="uses wrap" aria-labelledby="uses-title">
+    <h2 id="uses-title" class="reveal">What people save with it</h2>
+    <ul class="use-list reveal">
+      <li><div><h3>A lecture for a flight with no Wi-Fi</h3><p>An hour-long class from YouTube, small enough for a phone or tablet.</p></div><span class="size">Pick 720p or 480p</span></li>
+      <li><div><h3>Your own Reels and TikToks</h3><p>A backup of what you posted, in case an account gets locked or a post disappears.</p></div><span class="size">Pick Best quality</span></li>
+      <li><div><h3>Just the sound of a talk or a song</h3><p>Podcasts, interviews and live sets, ready for your music player.</p></div><span class="size">Pick Audio only</span></li>
+      <li><div><h3>A clip to edit</h3><p>Footage you have permission to use, saved as MP4 so CapCut, Premiere or DaVinci Resolve open it straight away.</p></div><span class="size">Pick 1080p</span></li>
     </ul>
   </section>
 
+  <!-- 5. Features -->
+  <section class="features" id="features" aria-labelledby="features-title">
+    <div class="wrap">
+      <h2 id="features-title" class="reveal">Small details that save you time</h2>
+      <ul class="feature-list reveal">
+        <li><h3>Live progress</h3><p>Percent, speed and time left update while the file downloads, on Windows as well as Mac and Linux.</p></li>
+        <li><h3>Clipboard detection</h3><p>Copy a link anywhere, switch to yoinks, and it asks if you want that one.</p></li>
+        <li><h3>Video and audio merged for you</h3><p>YouTube serves high quality video and sound as separate files. yoinks joins them into one MP4 with ffmpeg.</p></li>
+        <li><h3>Keyboard friendly</h3><p>Enter to fetch, arrow keys to pick, Esc to go back. You never need the mouse.</p></li>
+        <li><h3>Stays working</h3><p>Sites change often. yoinks updates yt-dlp, the engine inside it, so links keep working.</p></li>
+        <li><h3>Your folder, your theme</h3><p>Save to Downloads or any folder you choose, in a light or dark window.</p></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 6. Comparison -->
+  <section class="compare wrap" id="compare" aria-labelledby="compare-title">
+    <div class="compare-head reveal">
+      <h2 id="compare-title">yoinks or a downloader website?</h2>
+      <p>Websites are handy for one quick clip. For anything regular, an app on your computer is calmer and keeps your links private.</p>
+    </div>
+    <div class="table-wrap reveal" role="region" aria-labelledby="compare-title" tabindex="0">
+      <table>
+        <thead>
+          <tr><th scope="col"><span class="sr-only">Feature</span></th><th scope="col">yoinks</th><th scope="col">Typical downloader website</th></tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">File size before you download</th><td>On every option</td><td>Rarely shown</td></tr>
+          <tr><th scope="row">Ads and pop-ups</th><td>None</td><td>Common, sometimes fake download buttons</td></tr>
+          <tr><th scope="row">Highest quality</th><td>Whatever the site offers, up to 4K and above</td><td>Often limited to 720p or 1080p</td></tr>
+          <tr><th scope="row">Where the work happens</th><td>On your computer</td><td>On their server, which sees every link you paste</td></tr>
+          <tr><th scope="row">Works with</th><td>About 1,800 sites</td><td>Usually one or a few</td></tr>
+          <tr><th scope="row">Cost</th><td>Free, open source</td><td>Free with ads, or a paid plan</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 7. Sites -->
   <section class="sites" aria-labelledby="sites-title">
     <div class="wrap reveal">
       <h2 id="sites-title" class="sr-only">Supported sites</h2>
-      <p class="sites-line">Works with <strong>YouTube</strong>, <strong>TikTok</strong>, <strong>Instagram</strong>, <strong>X</strong>, <strong>Facebook</strong>, <strong>Reddit</strong>, <strong>Twitch</strong>, <strong>SoundCloud</strong> and about 1,800 other sites.</p>
-      <p class="sites-src">The full list comes from yt-dlp: <a href="https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md">see every supported site</a>.</p>
+      <p class="sites-line">Works with <strong>YouTube</strong>, <strong>TikTok</strong>, <strong>Instagram</strong>, <strong>X</strong>, <strong>Facebook</strong>, <strong>Reddit</strong>, <strong>Twitch</strong>, <strong>SoundCloud</strong>, <strong>Dailymotion</strong> and about 1,800 other sites.</p>
+      <p class="sites-src">The list comes from yt-dlp. <a href="https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md">See every supported site</a></p>
     </div>
   </section>
 
-  <section class="download wrap" id="download" aria-labelledby="download-title">
-    <div class="download-head reveal">
-      <h2 id="download-title">Download yoinks</h2>
-      <p>Version <span id="ver">1.1.0</span>. Free, MIT licensed, built by GitHub Actions straight from the public code.</p>
-    </div>
-    <div class="platforms reveal">
-      <div class="platform">
-        <h3>Windows 10 and 11</h3>
-        <ul>
-          <li><a data-asset="setup" href="https://github.com/itsyasirkhandev/yoinks-video-downloader/releases/latest">Installer (.exe)</a> <span class="size" data-size="setup">~133 MB</span></li>
-          <li><a data-asset="portable" href="https://github.com/itsyasirkhandev/yoinks-video-downloader/releases/latest">Portable, no install (.exe)</a> <span class="size" data-size="portable">~133 MB</span></li>
-        </ul>
+  <!-- 8. Download and install -->
+  <section class="download" id="download" aria-labelledby="download-title">
+    <div class="wrap">
+      <div class="download-head reveal">
+        <h2 id="download-title">Download and install</h2>
+        <p>Version <span id="ver">1.1.1</span>. GitHub Actions builds every file straight from the public code.</p>
       </div>
-      <div class="platform">
-        <h3>macOS</h3>
-        <ul>
-          <li><a data-asset="dmg" href="https://github.com/itsyasirkhandev/yoinks-video-downloader/releases/latest">Apple Silicon, M1 and newer (.dmg)</a> <span class="size" data-size="dmg">~165 MB</span></li>
-        </ul>
-        <p class="platform-note">Intel Macs are not supported yet. <a href="#faq-intel">Read why</a>.</p>
-      </div>
-      <div class="platform">
-        <h3>Linux</h3>
-        <ul>
-          <li><a data-asset="appimage" href="https://github.com/itsyasirkhandev/yoinks-video-downloader/releases/latest">AppImage, any distro</a> <span class="size" data-size="appimage">~186 MB</span></li>
-          <li><a data-asset="deb" href="https://github.com/itsyasirkhandev/yoinks-video-downloader/releases/latest">Debian and Ubuntu (.deb)</a> <span class="size" data-size="deb">~155 MB</span></li>
-        </ul>
+      <div class="platforms reveal">
+        <article class="platform" data-os="windows">
+          <h3>Windows 10 and 11</h3>
+          <ul class="files">
+            <li><a data-asset="setup" href="https://github.com/itsyasirkhandev/yoinks-video-downloader/releases/latest">Installer (.exe)</a> <span class="size" data-size="setup">~133 MB</span></li>
+            <li><a data-asset="portable" href="https://github.com/itsyasirkhandev/yoinks-video-downloader/releases/latest">Portable, no install</a> <span class="size" data-size="portable">~133 MB</span></li>
+          </ul>
+          <ol class="install">
+            <li>Run the installer.</li>
+            <li>If you see "Windows protected your PC", click <strong>More info</strong>, then <strong>Run anyway</strong>.</li>
+          </ol>
+        </article>
+        <article class="platform" data-os="mac">
+          <h3>macOS (Apple Silicon)</h3>
+          <ul class="files">
+            <li><a data-asset="dmg" href="https://github.com/itsyasirkhandev/yoinks-video-downloader/releases/latest">M1 and newer (.dmg)</a> <span class="size" data-size="dmg">~165 MB</span></li>
+          </ul>
+          <ol class="install">
+            <li>Open the .dmg and drag yoinks into Applications.</li>
+            <li>If macOS blocks it, open <strong>System Settings</strong>, then <strong>Privacy &amp; Security</strong>, and click <strong>Open Anyway</strong>.</li>
+            <li>If it says the app is damaged, run <code>xattr -cr /Applications/yoinks.app</code> in Terminal.</li>
+          </ol>
+        </article>
+        <article class="platform" data-os="linux">
+          <h3>Linux</h3>
+          <ul class="files">
+            <li><a data-asset="appimage" href="https://github.com/itsyasirkhandev/yoinks-video-downloader/releases/latest">AppImage, any distro</a> <span class="size" data-size="appimage">~186 MB</span></li>
+            <li><a data-asset="deb" href="https://github.com/itsyasirkhandev/yoinks-video-downloader/releases/latest">Debian and Ubuntu (.deb)</a> <span class="size" data-size="deb">~155 MB</span></li>
+          </ul>
+          <ol class="install">
+            <li>AppImage: run <code>chmod +x yoinks*.AppImage</code>, then open it.</li>
+            <li>.deb: run <code>sudo apt install ./yoinks*.deb</code>.</li>
+          </ol>
+        </article>
       </div>
     </div>
   </section>
 
+  <!-- 9. Open source -->
+  <section class="open wrap" aria-labelledby="open-title">
+    <div class="open-in reveal">
+      <h2 id="open-title">Open source, so you can check what it does</h2>
+      <p>A downloader asks for a lot of trust, so every line of yoinks is public. It is a friendly window around two well known free tools: <a href="https://github.com/yt-dlp/yt-dlp">yt-dlp</a>, which finds and downloads the video, and <a href="https://ffmpeg.org">ffmpeg</a>, which joins and converts the files. The app has no analytics and sends nothing about you anywhere.</p>
+      <p class="open-links"><a class="btn btn-ghost" href="https://github.com/itsyasirkhandev/yoinks-video-downloader">Read the code on GitHub</a><a class="btn btn-ghost" href="https://github.com/itsyasirkhandev/yoinks-video-downloader/issues">Report a problem</a></p>
+    </div>
+  </section>
+
+  <!-- 10. FAQ -->
   <section class="faq wrap" id="faq" aria-labelledby="faq-title">
     <h2 id="faq-title" class="reveal">Questions people ask</h2>
     <div class="faq-list">
       <details>
         <summary>Is yoinks really free?</summary>
-        <p>Yes. It is open source under the MIT license. There are no ads, no account and no paid version.</p>
+        <p>Yes. It is open source under the MIT license, with no ads, no account and no paid version.</p>
       </details>
       <details>
-        <summary>Windows says "Windows protected your PC". Is it safe to continue?</summary>
-        <p>Windows shows that warning because the app is not code-signed yet, and signing certificates cost money every year. Click <strong>More info</strong>, then <strong>Run anyway</strong>. Every line of code is public on GitHub, and GitHub Actions builds the downloads from that code.</p>
+        <summary>Why does Windows or macOS warn me when I open it?</summary>
+        <p>The app isn't code-signed yet. Signing certificates cost money every year, so the system shows a warning for any unsigned app. The install steps above show how to open it. You can read the code and see how GitHub builds each file before you decide.</p>
+      </details>
+      <details>
+        <summary>What format do I get?</summary>
+        <p>Video saves as MP4, which plays on almost every phone, TV and editor. Audio only saves as MP3 at the highest quality the source allows.</p>
+      </details>
+      <details>
+        <summary>Can I download a whole playlist or channel?</summary>
+        <p>Not yet. yoinks downloads one video per link. If you paste a link to a video inside a playlist, it saves just that video.</p>
       </details>
       <details id="faq-intel">
         <summary>Does it work on Intel Macs?</summary>
-        <p>Not as a download yet. The macOS build targets Apple Silicon (M1 and newer). If you have an Intel Mac, you can build yoinks from the source code with Node.js by following the README.</p>
+        <p>Not as a ready download yet. The macOS build is for Apple Silicon (M1 and newer). On an Intel Mac you can build it from the source code with Node.js by following the README.</p>
       </details>
       <details>
         <summary>YouTube says "Sign in to confirm you're not a bot". What now?</summary>
-        <p>YouTube sometimes blocks downloads from internet connections it thinks are automated. The block comes from YouTube and usually clears after a while. Other sites are not affected.</p>
+        <p>YouTube sometimes blocks downloads from internet connections it thinks are automated. The block comes from YouTube, usually clears after a while, and doesn't affect other sites.</p>
       </details>
       <details>
         <summary>Is downloading videos legal?</summary>
-        <p>It depends on the video and on where you live. Download your own uploads, public domain and Creative Commons films, or anything the owner lets you keep. yoinks does not break DRM, so paid streaming services will not work.</p>
+        <p>It depends on the video and where you live. Download your own uploads, public domain and Creative Commons videos, or anything the owner lets you keep. yoinks doesn't break DRM, so Netflix and other paid streaming services won't work.</p>
       </details>
-      <details>
-        <summary>Where do my downloads go?</summary>
-        <p>To your Downloads folder. Click <strong>Change</strong> under the link box in the app to pick another folder.</p>
-      </details>
+    </div>
+  </section>
+
+  <!-- 11. Final CTA -->
+  <section class="final" aria-labelledby="final-title">
+    <div class="wrap final-in reveal">
+      <h2 id="final-title">Paste your first link in under a minute</h2>
+      <div class="cta">
+        <a class="btn btn-lg" data-primary href="https://github.com/itsyasirkhandev/yoinks-video-downloader/releases/latest"><span data-primary-label>Download yoinks</span></a>
+        <p class="cta-meta" data-primary-meta>Free and open source</p>
+      </div>
     </div>
   </section>
 
@@ -182,11 +300,11 @@
 
 <footer class="foot">
   <div class="wrap foot-in">
-    <p>yoinks is MIT licensed and built on <a href="https://github.com/yt-dlp/yt-dlp">yt-dlp</a> and <a href="https://ffmpeg.org">ffmpeg</a>. It started from <a href="https://github.com/pablostanley/yoinks">yoinks by Pablo Stanley</a>.</p>
-    <p><a href="https://github.com/itsyasirkhandev/yoinks-video-downloader/issues">Report a problem</a></p>
+    <p>yoinks is MIT licensed and built on yt-dlp and ffmpeg. It started from <a href="https://github.com/pablostanley/yoinks">yoinks by Pablo Stanley</a>.</p>
+    <p><a href="#download">All downloads</a><span aria-hidden="true"> &middot; </span><a href="https://github.com/itsyasirkhandev/yoinks-video-downloader/releases">Release notes</a></p>
   </div>
 </footer>
 
-<script src="assets/site.js" defer></script>
+<script src="assets/site.js?v=3" defer></script>
 </body>
 </html>
